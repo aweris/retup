@@ -1,0 +1,24 @@
+name: development
+
+on:
+  push:
+    tags-ignore:
+      - '**'
+
+jobs:
+  lint:
+    name: lint
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: '1.15.2'
+
+      - name: Lint
+        run: make lint
