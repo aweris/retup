@@ -30,3 +30,32 @@ changelog:
     exclude:
       - '^docs:'
       - '^test:'
+dockers:
+  - goos: linux
+    goarch: amd64
+    goarm: ''
+    binaries:
+      - retup
+    image_templates:
+      - "aweris/retup:latest"
+      - "aweris/retup:{{ .Tag }}"
+      - "aweris/retup:v{{ .Major }}.{{ .Minor }}"
+      - "aweris/retup:v{{ .Major }}"
+    # Skips the docker push. Could be useful if you also do draft releases.
+    # If set to auto, the release will not be pushed to the docker repository
+    # in case there is an indicator for prerelease in the tag e.g. v1.0.0-rc1
+    # Defaults to false. It's auto as an additional safety measure.
+    skip_push: auto
+    dockerfile: Dockerfile
+    build_flag_templates:
+      - "--label=org.label-schema.schema-version=1.0"
+      - "--label=version={{.Version}}"
+      - "--label=org.label-schema.name={{.ProjectName}}"
+      - "--label=org.label-schema.version={{.Version}}"
+      - "--label=org.label-schema.build-date={{.Date}}"
+      - "--label=org.label-schema.vcs-ref={{.FullCommit}}"
+      - "--label=org.label-schema.docker.dockerfile=Dockerfile"
+      - "--label=org.opencontainers.image.name={{.ProjectName}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
